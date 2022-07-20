@@ -1,13 +1,22 @@
 import rock from "./images/icon-rock.svg";
 import paper from "./images/icon-paper.svg";
 import scissors from "./images/icon-scissors.svg";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Stats from "./components/Stats";
 
 function App() {
   const [stance, setStance] = useState();
   const [botStance, setBot] = useState();
   const [result, setResult] = useState();
   const [score, setScore] = useState(0);
+
+  let game = (choice) => {
+    pickStance(choice);
+    setResult((x) => (x = versus(stance, botStance)));
+    setTimeout(() => {
+      updateScore();
+    }, 100);
+  };
 
   let pickStance = (choice) => {
     setStance((x) => (x = choice));
@@ -31,14 +40,11 @@ function App() {
     if (player === "rock") {
       switch (bot) {
         case "rock":
-          setResult((x) => (x = "TIE"));
-          break;
+          return "TIE";
         case "paper":
-          setResult((x) => (x = "DEFEAT"));
-          break;
+          return "DEFEAT";
         case "scissors":
-          setResult((x) => (x = "VICTORY"));
-          break;
+          return "VICTORY";
         default:
           pickStance(player);
           break;
@@ -46,14 +52,11 @@ function App() {
     } else if (player === "paper") {
       switch (bot) {
         case "rock":
-          setResult((x) => (x = "VICTORY"));
-          break;
+          return "VICTORY";
         case "paper":
-          setResult((x) => (x = "TIE"));
-          break;
+          return "TIE";
         case "scissors":
-          setResult((x) => (x = "DEFEAT"));
-          break;
+          return "DEFEAT";
         default:
           pickStance(player);
           break;
@@ -61,20 +64,19 @@ function App() {
     } else if (player === "scissors") {
       switch (bot) {
         case "rock":
-          setResult((x) => (x = "DEFEAT"));
-          break;
+          return "DEFEAT";
         case "paper":
-          setResult((x) => (x = "VICTORY"));
-          break;
+          return "VICTORY";
         case "scissors":
-          setResult((x) => (x = "TIE"));
-          break;
+          return "TIE";
         default:
           pickStance(player);
           break;
       }
     }
+  };
 
+  let updateScore = () => {
     switch (result) {
       case "TIE":
         break;
@@ -85,21 +87,13 @@ function App() {
         setScore((x) => (x -= 1));
         break;
       default:
-        versus(player, bot);
         break;
     }
   };
 
-  useEffect(() => {
-    versus(stance, botStance);
-  }, [stance, botStance]);
-
   return (
     <div className="App bg-slate-600 h-screen m-0 text-center">
-      <h1>{score}</h1>
-      <h1>{stance}</h1>
-      <h1>{botStance}</h1>
-      <h1>{result}</h1>
+      <Stats />
       <div className="flex flex-col gap-[3rem] items-center justify-center h-full">
         <div className="flex gap-[5rem]">
           <div>
@@ -107,7 +101,7 @@ function App() {
               src={rock}
               alt="rock"
               className="cursor-pointer"
-              onClick={() => pickStance("rock")}
+              onClick={() => game("rock")}
             />
           </div>
           <div>
@@ -115,7 +109,7 @@ function App() {
               src={paper}
               alt="paper"
               className="cursor-pointer"
-              onClick={() => pickStance("paper")}
+              onClick={() => game("paper")}
             />
           </div>
         </div>
@@ -125,7 +119,7 @@ function App() {
               src={scissors}
               alt="scissors"
               className="cursor-pointer"
-              onClick={() => pickStance("scissors")}
+              onClick={() => game("scissors")}
             />
           </div>
         </div>
