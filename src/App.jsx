@@ -25,6 +25,21 @@ function App() {
       default:
         pickStance(choice);
     }
+
+    setScore(updateScore(score));
+  };
+
+  let updateScore = (x) => {
+    switch (result) {
+      case "TIE":
+        break;
+      case "VICTORY":
+        return x + 1;
+      case "DEFEAT":
+        return x - 1;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
@@ -73,20 +88,20 @@ function App() {
     }
   }, [botStance, stance]);
 
-  useEffect(() => {
-    switch (result) {
-      case "TIE":
-        break;
-      case "VICTORY":
-        setScore((x) => (x += 1));
-        break;
-      case "DEFEAT":
-        setScore((x) => (x -= 1));
-        break;
-      default:
-        break;
-    }
-  }, [result]);
+  // useEffect(() => {
+  //   switch (result) {
+  //     case "TIE":
+  //       break;
+  //     case "VICTORY":
+  //       setScore((x) => (x += 1));
+  //       break;
+  //     case "DEFEAT":
+  //       setScore((x) => (x -= 1));
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }, [result]);
 
   return (
     <div className="App bg-slate-600 h-screen m-0 text-center">
